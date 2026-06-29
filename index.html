@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SleekPOS Enterprise - Pakistan Edition</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- SCREEN UI WRAPPER -->
+    <div class="app-wrapper">
+        <header class="main-header">
+            <div class="logo">Sleek<span>POS</span></div>
+            <div class="header-right">
+                <span class="market-badge">🇵🇰 IndexedDB Database Active</span>
+                <button id="theme-toggle" class="theme-btn">🌙 Dark Mode</button>
+            </div>
+        </header>
+
+        <div class="app-container">
+            
+            <!-- COLUMN 1: Settings, Forms, Inventory -->
+            <div class="left-column">
+                
+                <!-- Print Paper Customizing Panel -->
+                <div class="card customization-card">
+                    <h3 class="card-title">⚙️ Receipt Paper Customizer</h3>
+                    <div class="settings-grid">
+                        <div class="input-group">
+                            <label>Store Name</label>
+                            <input type="text" id="cfg-store-name" value="✨ APNA SUPER STORE ✨">
+                        </div>
+                        <div class="input-group">
+                            <label>Address Line</label>
+                            <input type="text" id="cfg-store-address" value="Main Commercial Market, Rawalpindi">
+                        </div>
+                        <div class="input-group">
+                            <label>Contact Phone</label>
+                            <input type="text" id="cfg-store-phone" value="051-1234567">
+                        </div>
+                        <div class="input-group">
+                            <label>Paper Size Width</label>
+                            <select id="cfg-paper-width">
+                                <option value="80mm" selected>80mm (Standard Thermal)</option>
+                                <option value="58mm">58mm (Small Token Mobile)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add New Item Section -->
+                <div class="card">
+                    <h3 class="card-title">📦 Add New Stock Item</h3>
+                    <form id="product-form" class="product-form">
+                        <div class="input-group">
+                            <label>Item Description (English)</label>
+                            <input type="text" id="form-name" placeholder="e.g., National Ketchup" required>
+                        </div>
+                        <div class="input-group">
+                            <label>آئٹم کا نام (Urdu)</label>
+                            <input type="text" id="form-urdu" class="urdu-input" placeholder="ٹماٹو کیچپ">
+                        </div>
+                        <div class="input-group">
+                            <label>Price (Rs.)</label>
+                            <input type="number" id="form-price" placeholder="0" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Initial Qty</label>
+                            <input type="number" id="form-stock" placeholder="0" required>
+                        </div>
+                        <button type="submit" class="btn btn-add">Save Database</button>
+                    </form>
+                </div>
+
+                <!-- Live Search & Table -->
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="🔍 Search via English description or اردو نام instantly...">
+                </div>
+
+                <div class="card table-container">
+                    <table id="inventory-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Product Details</th>
+                                <th>Price</th>
+                                <th>Available Stock</th>
+                                <th style="text-align: right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-rows">
+                            <!-- Injected securely via Database Engine dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- COLUMN 2: Counter Billing & Checkout -->
+            <div class="right-column">
+                <div class="card invoice-box">
+                    
+                    <!-- Customer Information Section -->
+                    <div class="customer-info-box">
+                        <h4 class="sub-heading">👤 Walk-in Customer Details</h4>
+                        <div class="customer-fields">
+                            <input type="text" id="cust-name" placeholder="Customer Name (Optional)">
+                            <input type="tel" id="cust-phone" placeholder="Phone (e.g. 03001234567)">
+                        </div>
+                    </div>
+
+                    <div class="invoice-header">
+                        <div>
+                            <h3>Retail Bill</h3>
+                            <p class="invoice-meta">Live Digital Counter</p>
+                        </div>
+                        <div class="invoice-number" id="invoice-id-display">INV-1001</div>
+                    </div>
+
+                    <!-- Live items counter grid container -->
+                    <div id="invoice-items-container" class="invoice-items">
+                        <div class="invoice-item header">
+                            <span>Item Description</span>
+                            <span style="text-align: center;">Qty</span>
+                            <span style="text-align: right;">Amount</span>
+                        </div>
+                    </div>
+
+                    <!-- Payment Selector -->
+                    <div class="payment-methods">
+                        <span class="payment-label">Payment Mode:</span>
+                        <div class="method-options">
+                            <label class="method-btn active"><input type="radio" name="payment" value="Cash" checked> Cash</label>
+                            <label class="method-btn"><input type="radio" name="payment" value="Card"> Card</label>
+                            <label class="method-btn"><input type="radio" name="payment" value="Mobile Wallet"> Mobile Wallet</label>
+                        </div>
+                    </div>
+
+                    <div class="invoice-summary">
+                        <div class="summary-row"><span>Subtotal:</span><span>Rs. <span id="bill-subtotal">0</span></span></div>
+                        <div class="summary-row total"><span>Grand Total:</span><span>Rs. <span id="bill-total">0</span></span></div>
+                    </div>
+
+                    <div class="invoice-actions">
+                        <button id="clear-bill" class="btn btn-clear">Discard</button>
+                        <button id="checkout-bill" class="btn btn-checkout">🖨️ Complete & Print</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 🖨️ THERMAL REALISTIC RECEIPT OUTPUT TICKET -->
+    <div id="print-receipt" class="thermal-receipt">
+        <div class="receipt-center">
+            <h2 id="prnt-store-name">STORE NAME PLACEHOLDER</h2>
+            <p id="prnt-store-address">ADDRESS PLACEHOLDER</p>
+            <p id="prnt-store-phone">PHONE PLACEHOLDER</p>
+            <p class="line-break">-----------------------------------------</p>
+        </div>
+        <div class="receipt-meta">
+            <p>Invoice #: <span id="print-inv-id">0000</span></p>
+            <p>Date/Time: <span id="print-date-time">30-06-2026</span></p>
+            <p>Customer: <span id="print-cust-name">Walk-In</span></p>
+            <p>Phone No: <span id="print-cust-phone">N/A</span></p>
+            <p>Payment Mode: <span id="print-payment-mode">Cash</span></p>
+            <p class="line-break">-----------------------------------------</p>
+        </div>
+        <table class="receipt-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th style="text-align: center;">Qty</th>
+                    <th style="text-align: right;">Total</th>
+                </tr>
+            </thead>
+            <tbody id="print-items-body"></tbody>
+        </table>
+        <div class="line-break">-----------------------------------------</div>
+        <div class="receipt-total-section">
+            <div class="receipt-total-row bold"><span>Grand Total:</span><span>Rs. <span id="print-total">0</span></span></div>
+        </div>
+        <div class="receipt-center footer-msg">
+            <p class="line-break">-----------------------------------------</p>
+            <p>Thank You For Shopping With Us!</p>
+            <p>تبدیلی یا واپسی 3 دن کے اندر لائیں۔</p>
+            <small>Powered by SleekPOS Engine</small>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
